@@ -145,7 +145,8 @@
 
 	//var circulo = L.circle([37.24443227925681, -6.949195861816406], 100).addTo(map);
 
-	var circulo = L.circleMarker([37.24443227925681, -6.949195861816406],{color: 'red', opacity: 0.8, fillOpacity: 0.6}).setRadius(73).addTo(map);
+	L.circleMarker([37.24443227925681, -6.949195861816406],{color: 'red', opacity: 0.8, fillOpacity: 0.6}).setRadius(73).addTo(map).bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+	//circulo.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 	
 	//map.addLayer(circulo);
 	//http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png
