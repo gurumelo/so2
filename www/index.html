@@ -3,7 +3,9 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="leaflet/leaflet.css" />
-	<script src="leaflet/leaflet.js"></script>
+
+
+
 	<style>
 		@font-face {
 			font-family: 'open_sanscondensed_light';
@@ -15,44 +17,38 @@
 			font-weight: normal;
 			font-style: normal;
 		}	
-@font-face {
-    font-family: 'open_sans_condensedbold';
-    src: url('fonts/OpenSans-CondBold-webfont.eot');
-    src: url('fonts/OpenSans-CondBold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/OpenSans-CondBold-webfont.woff') format('woff'),
-         url('fonts/OpenSans-CondBold-webfont.ttf') format('truetype'),
-         url('fonts/OpenSans-CondBold-webfont.svg#open_sans_condensedbold') format('svg');
-    font-weight: normal;
-    font-style: normal;
+		@font-face {
+			font-family: 'open_sans_condensedbold';
+			src: url('fonts/OpenSans-CondBold-webfont.eot');
+			src: url('fonts/OpenSans-CondBold-webfont.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-CondBold-webfont.woff') format('woff'),
+			url('fonts/OpenSans-CondBold-webfont.ttf') format('truetype'),
+			url('fonts/OpenSans-CondBold-webfont.svg#open_sans_condensedbold') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
 
-}
-
-* {
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-      -ms-box-sizing: border-box;
-          box-sizing: border-box;
-	-webkit-tap-highlight-color: rgba(0,0,0,0);
-}
+		* {
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			-ms-box-sizing: border-box;
+			box-sizing: border-box;
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+		}
 
 
-.tilt {
-  -webkit-transition: all 0.5s ease;
-     -moz-transition: all 0.5s ease;
-       -o-transition: all 0.5s ease;
-      -ms-transition: all 0.5s ease;
-          transition: all 0.5s ease;
-}
+		.tilt {
+			-webkit-transition: all 0.5s ease;
+			-moz-transition: all 0.5s ease;
+			-o-transition: all 0.5s ease;
+			-ms-transition: all 0.5s ease;
+			transition: all 0.5s ease;
+		}	
 
 
 		html, body {
 			width: 100%;
 			height: 100%;
-		}
-		#map { 
-			width: 100%;
-			height: 100%;
-			background: #0b040b;
 		}
 		body {
 			padding: 0;
@@ -70,25 +66,38 @@
 			min-height: 60px;
 			border-bottom: 1px solid #252222;
 		}
-		#cabecera #fecha {
-				position: absolute;
-				top: 46px;
-				display: inline-block;
-				background: #ffffff;
-				color: #000000;
-				padding: 2px 5px;
-				border-radius: 2px;
-				font-size: 17px;
-				z-index: 1;
+		#map { 
+			width: 100%;
+			height: 100%;
+			background: #0b040b;
 		}
-		#menu {
+		#cabecera #fecha {
+			position: absolute;
+			top: 46px;
+			display: inline-block;
+			background: #ffffff;
+			color: #000000;
+			padding: 2px 5px;
+			border-radius: 2px;
+			font-size: 17px;
+			text-transform: uppercase;
+			z-index: 1;
+		}
+		.menu {
 			float: right;
 			margin-top: 16px;
 			margin-right: 28px;
 			cursor: pointer;
+			transition: width 1s, height 1s, transform 1s;
+			-moz-transition: width 1s, height 1s, -moz-transform 1s;
+			-webkit-transition: width 1s, height 1s, -webkit-transform 1s;
+			-o-transition: width 1s, height 1s,-o-transform 1s;
 		}
-		#menu:hover {
-			-moz-transform:rotate(90deg);
+		.menu:hover {
+			transform : scale(1.5);
+			-moz-transform : scale(1.3);
+			-webkit-transform : scale(1.3);
+			-o-transform : scale(1.3);
 		}
 		
 		.ghbtns {
@@ -111,6 +120,45 @@
 		.docho {
 			font-size: 18px;
 		}
+		#elmenu {
+			position: absolute;
+			top: 59px;
+			right: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(255,255,255,0.9);
+			z-index: 99999;
+			overflow-y: auto;	
+		}
+		ul#opciones {
+			list-style: none;
+			margin-left: -50px;
+			margin-top: 30px;
+			font-size: 40px;
+			color: #383838;
+		}
+		ul#opciones li {
+			border-bottom: 1px solid #cdcdcd;
+			padding-top: 20px;
+			padding-bottom: 20px;
+		}
+		ul#opciones li a {
+			color: #383838;
+			text-decoration: none;			
+		}
+		ul#opciones li a:hover {
+			text-decoration: underline;
+		}
+		.gran {
+			font-size: 20px;
+			padding: 3px;
+		}
+		.pa {
+			padding-top: 3px;
+		}
+		.invisible {
+			margin-right: -99999px;
+		}
 		@media only screen and (max-width: 359px) {
 
 		}
@@ -119,8 +167,17 @@
 <body>
 
 	<div id="cabecera">
-		<div id="fecha">10-11-2015</div>
-		<img id="menu" class="tilt" src="img/menu.jpg" />
+		<div id="fecha"></div>
+		<img id="menu" class="menu" src="img/menu.jpg" />
+		<img id="cemenu" class="menu invisible" src="img/cemenu.jpg" />
+	</div>
+	
+	<div id="elmenu" class="invisible">
+		<ul id="opciones">
+			<li><img src="img/re.png" /> Recargar</li>
+			<li><img src="img/pa.png" /> Pasado</li>
+			<li><a id="lafuente" href="" target="_blank" /><img src="img/fu.png" /> Fuente</a></li>
+		</ul>
 	</div>
 
 	<div id="map"></div>
@@ -129,8 +186,13 @@
 		<span class="docho">SO₂</span> Huelva
 	</div>
 
-	<script>
+
+	<script src="leaflet/leaflet.js"></script>
+	<script src="js/jquery-2.1.4.min.js"></script>
+	<script id="datos"></script>
 	
+
+	<script>
 	
 	var map = L.map('map', {
 		center: [37.24443227925681, -6.949195861816406],
@@ -142,22 +204,120 @@
 	var tiles = L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png', {
 		attribution: 'Openstreetmap'
 	}).addTo(map);
-
-	//var circulo = L.circle([37.24443227925681, -6.949195861816406], 100).addTo(map);
-
-	L.circleMarker([37.24443227925681, -6.949195861816406],{color: 'red', opacity: 0.8, fillOpacity: 0.6}).setRadius(73).addTo(map).bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-	//circulo.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 	
-	//map.addLayer(circulo);
-	//http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png
-	//tiles.setUrl('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png');
-	//tiles.setUrl('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png');
-	//tiles.setUrl('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png');
-	//tiles.setUrl('http://{s}.tile.cloudmade.com/1a1b06b230af4efdbb989ea99e9841af/999/256/{z}/{x}/{y}.png');
-	//circulo.setStyle({fillOpacity:0.4});
-	// #0c060d
+
+
+////pendientes: que salgan las marcas una vez cargan las capas tiles.on('load',
+////que al darle a recargar, no se vuelva a cargar el archivo js o sí...
+////si peligro
+
+	var caracteristicas = {color: 'red', opacity: 0.8, fillOpacity: 0.6}
+	var circulos = new Array();
+
+	function hola() {
+		console.log('hola');
+	}
+
+	function anima(archivo) {
+		var src = archivo +'?'+ (new Date).getTime();
+		$('#datos').attr('src', src);
+		$('#datos').load(function() {
+			
+			//mostrar fecha
+			$('#fecha').html(datos.lafecha);
+			
+			//enlazar fuente
+			$('#lafuente').attr('href', datos.laliga);
+        
+			//animación de puntos.
+			var delay = 1000;
+			var fin = Object.keys(impactos).length - 1;
+			circulos = new Array();
+						
+			$.each(impactos.features, function (key, val) {
+				var geometria = val.geometry;
+				var propiedades = val.properties; 
+				
+				var coordenadas = geometria.coordinates;
+				var texto = '<center><b>'+ propiedades.estacion +'</b><br /><b class="gran">'+ propiedades.so2 +'</b> μg/m³<br /><div class="pa">'+ propiedades.hora +'</div>';
+				if (propiedades.serepite > 0) {
+						texto += '<br /><b>'+ propiedades.serepite +'</b> repeticiones';
+				}
+				
+				texto += '</center>';
+					
+				setTimeout(function() {
+					
+					var circulito = new L.circleMarker(coordenadas,caracteristicas).setRadius(propiedades.so2).addTo(map).bindPopup(texto).openPopup();
+
+					circulos.push(circulito);
+					
+					map.addLayer(circulos[key]);
+					
+					map.setView(coordenadas); 
+					
+					if ( key == fin ) {
+						// Ha llegado a su fin la animación
+						// cerramos los popups
+						setTimeout( function() {
+							
+							map.closePopup();
+							
+						}, 6000);
+						// Limpiamos los círculos pánico
+						setTimeout( function() {
+							
+							for(i=0;i<circulos.length;i++) {
+								
+								map.removeLayer(circulos[i]);
+															
+								var marker = L.marker(circulos[i]._latlng).addTo(map).bindPopup(circulos[i]._popup._content);
+							
+							} 
+							
+							map.setView([37.24443227925681, -6.949195861816406]);
+							 
+						}, 8000);
+					
+					// fin if
+					}
+					
+				// fin timeout circulos
+				}, delay);
+				
+				delay += 3000;
+				
+			// fin each	
+			});
+			
+		// fin load datos	
+		});
+	
+	// fin función anima	
+	}
+
+
+	$(document).ready(function() {
+		
+		anima('presente.js');
+		
+		
+		$('#menu').on('click', function() {
+			$(this).addClass('invisible');
+			$('#elmenu, #cemenu').removeClass('invisible');
+		});
+		
+		$('#cemenu').on('click', function() {
+			$(this).add('#elmenu').addClass('invisible');
+			$('#menu').removeClass('invisible');
+			
+		});
+		
+	});
+
+
+
 	</script>
 
-
 </body>
-	
+</html>	

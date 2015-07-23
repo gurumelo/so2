@@ -52,10 +52,12 @@ function parsearTablas($estacion, $posicion) {
 	global $ano;
 	global $mes;
 	global $dia;
+	global $mesletras;
 	global $conexion;
 	global $html;
 	global $urljun;
 	global $control;
+	global $datos;
 	global $geojson;
 	$tabla = $html->find('table', $posicion)->find('tr');
 	echo $estacion;
@@ -65,14 +67,15 @@ function parsearTablas($estacion, $posicion) {
 	foreach($tabla as $row) {
 		$tds = $row->find('td');
 		if ( $o > 0 && $o < $ultima ) {
-	                $tds = $row->find('td');
+	        $tds = $row->find('td');
 			$hora = $tds[0]->innertext;
 			$estado = $tds[1]->innertext;
 			echo $o;
-                        $hora = mysqli_real_escape_string($conexion, $hora);
-                        $estado = mysqli_real_escape_string($conexion, $estado);
-                        $sentencia = "INSERT INTO cuantitativos(estacion,hora,estado,fecha) VALUES('". $estacion ."','". $hora ."','". $estado ."', '". $ano ."-". $mes ."-". $dia ."')";
-                        mysqli_query($conexion,$sentencia);
+			echo "estado: (". $estado .") --";
+            $hora = mysqli_real_escape_string($conexion, $hora);
+            $estado = mysqli_real_escape_string($conexion, $estado);
+            $sentencia = "INSERT INTO cuantitativos(estacion,hora,estado,fecha) VALUES('". $estacion ."','". $hora ."','". $estado ."', '". $ano ."-". $mes ."-". $dia ."')";
+            mysqli_query($conexion,$sentencia);
 		}
 		$o++;
 	}
@@ -84,9 +87,17 @@ function parsearTablas($estacion, $posicion) {
 	$sentenciamaximo = mysqli_query($conexion,$maximo);
 	$valormaximo = mysqli_fetch_array($sentenciamaximo, MYSQLI_NUM);
 	mysqli_free_result($sentenciamaximo);
+	
+	echo "----- EL VALOR MÄXIMO SACADO DE LA BD es $valormaximo[1] ------";
+	
 	if ($valormaximo[1] >= 20 && $valormaximo[1] != "") {
 		# si el control está a 0 iniciamos por primera vez el array geojson.
 		if ($control == 0) {
+			$datos = array(
+				'lafecha'	=> $dia."-".$mesletras."-".$ano ,
+				'laliga'	=> $urljun
+			);
+			
 			$geojson = array(
 				'type'      => 'FeatureCollection',
 				'features'  => array()
@@ -100,10 +111,14 @@ function parsearTablas($estacion, $posicion) {
 		
 		# Sacamos latitud y longitud de la estación
 		$posicion = "SELECT latitud, longitud FROM estaciones WHERE nombre='". $estacion ."'";
+		
+		echo "---- POSICIONNNNN $posicion --------------";
+		
 		$sentenciaposicion = mysqli_query($conexion, $posicion);
 		$posiciones = mysqli_fetch_array($sentenciaposicion, MYSQLI_NUM);
 		mysqli_free_result($sentenciaposicion);
 		
+		echo "------ LAT: $posiciones[0] --------- LONG: $posiciones[1] ----------";
 		
 		#Comenzamos el array de propiedades
 		$propiedades = array(
@@ -111,8 +126,7 @@ function parsearTablas($estacion, $posicion) {
 			'so2' => $valormaximo[1],
 			'hora' => $valormaximo[0],
 			'peligro' => NULL,
-			'serepite' => NULL,
-			'laliga' => $urljun
+			'serepite' => NULL
 		);
 		
 		
@@ -169,20 +183,20 @@ function parsearTablas($estacion, $posicion) {
 
 
 
-$conexion = mysqli_connect('localhost','*****','*********','gaseame');
+$conexion = mysqli_connect('localhost','root','.botello2009','gaseame');
 
 
 
 if ($conexion) {
-	parsearTablas('La Rábida',14);
+	parsearTablas('La Rabida',14);
 	#parsearTablas('Mazagón',34);
-	parsearTablas('Marismas del Titán',6);
+	parsearTablas('Marismas del Titan',6);
 	parsearTablas('Pozo Dulce',8);
 	parsearTablas('Los Rosales',4);
 	parsearTablas('La Orden',2);
 	parsearTablas('Campus del Carmen',26);
 	parsearTablas('Palos', 16);
-	parsearTablas('Punta Umbría', 18);
+	parsearTablas('Punta Umbria', 18);
 	parsearTablas('San Juan del Puerto', 20);
 }
 
@@ -195,20 +209,26 @@ mysqli_close($conexion);
 
 # Aquí construimos el archivo geojson.
 
-if (isset($geojson)) {
+echo $datos;
+
+
+if (isset($datos) && isset($geojson)) {
+
+echo "holaaaaaa";
 
 		print_r($geojson);
 
 		#si ya existe el archivo se mueve a pasado.json
-		$presente = '../www/presente.json';
+		$presente = '../www/presente.js';
 		if (file_exists($presente)) {
 			#renombrar a pasado.json
-			$pasado = '../www/pasado.json';
+			$pasado = '../www/pasado.js';
 			rename($presente, $pasado);
 		}
 		
+		$datos = json_encode($datos, JSON_NUMERIC_CHECK);
 		$geojson = json_encode($geojson, JSON_NUMERIC_CHECK);
-		file_put_contents($presente, $geojson);
+		file_put_contents($presente, 'var datos = '. $datos .'; var impactos = '. $geojson .';');
 		
 }
 
