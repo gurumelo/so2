@@ -183,7 +183,7 @@ function parsearTablas($estacion, $posicion) {
 
 
 
-$conexion = mysqli_connect('localhost','root','.botello2009','gaseame');
+$conexion = mysqli_connect('localhost','root','******','gaseamap');
 
 
 
